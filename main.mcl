@@ -1,0 +1,88 @@
+import "os"
+import "deploy"
+import "fmt"
+
+$is_debian = os.is_debian()
+
+#$package = ""
+#$svc = ""
+
+class ssh($port, $auth) {
+
+	if $is_debian {
+		$package = "openssh-server"
+		$service = "ssh"
+	}
+
+	# Install openssh package
+	pkg "${package}" {
+		state => "installed",
+	}
+
+	# Update configuration of ssh
+	$tmplvalues = struct{
+		port => $port,
+		auth => $auth,
+	}
+
+	file "/etc/ssh/" {
+		state => $const.res.file.state.exists,
+	}
+
+	$sshd_config = deploy.readfile("/files/sshd_config.tpl")
+	file "/etc/ssh/sshd_config" {
+		state => $const.res.file.state.exists,
+		content => template($sshd_config, $tmplvalues),
+	}
+
+	# Start ssh service
+	svc "${service}" {
+		state => "running",
+	}
+
+	# Add keys to authorized_keys
+
+	file  "/root/.ssh/keys/"{
+		state => $const.res.file.state.exists,
+		purge => true,
+		recurse => true,
+	}
+}
+
+
+class keys($user, $key) {
+	print "user-${user}" {
+		msg => fmt.printf("user %s has key: %s", $user, $key),
+		Meta:autogroup => false,
+	}
+
+	file "/root/.ssh/keys/authorized-key-${user}" {
+		state => $const.res.file.state.exists,
+		content => "${key}\n",
+	}
+	# old way, not needed anymore
+	#exec "add-key-${user}" {
+	#	cmd => "echo ${key} >> /root/.ssh/authorized_keys.tmp",
+	#	shell => "/bin/bash",
+	#	ifcmd => "grep \"${key}\" /root/.ssh/authorized_keys.tmp",
+	#	ifshell => "/bin/bash",
+	#}
+}
+
+file "/root/.ssh/authorized_keys.tmp" {
+	state => $const.res.file.state.exists,
+	fragments => [
+		"/root/.ssh/keys/",
+	],
+}
+
+include ssh(22, "yes")
+include keys("oalshuha", "ssh-ed25519 XXX oalshuha@Loki")
+include keys("pgl", "ssh-ed25519 XXX pgl@lpc23")
+include keys("james", "ssh-rsa XXX james@miaplaza")
+
+# Later Additions:
+# Create class to add keys instead
+# Do the key additions in multiple ways
+# Make it os independent
+# Send fingerprint to some collector somewhere? 
