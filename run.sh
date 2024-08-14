@@ -1,2 +1,2 @@
 #!/bin/bash
-mgmt run --tmp-prefix lang /root/omar/mgmt-ssh/
+mgmt run lang --no-network --tmp-prefix /root/omar/mgmt-ssh/

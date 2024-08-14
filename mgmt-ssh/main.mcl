@@ -1,0 +1,58 @@
+import "deploy"
+import "os"
+
+$family = os.family()
+
+$package = if $family == "debian" {
+	"openssh-server"
+#} else if $family == "redhat" {
+#	"openssh-server"
+#} else if $family == "archlinux" {
+#	"openssh"
+} else {
+	""	
+}
+
+$service = if $family == "debian" {
+	"ssh"
+#} else if $family == "redhat" {
+# 	"sshd"
+#} else if $family == "archlinux" {
+# 	"sshd"
+} else {
+	""
+}
+
+class ssh($port, $auth) {
+	# Install openssh package
+	pkg "${package}" {
+		state => "installed",
+	}
+
+	# Update configuration of ssh
+	$tmplvalues = struct{
+		port => $port,
+		auth => $auth,
+	}
+
+	file "/etc/ssh/" {
+		state => $const.res.file.state.exists,
+	}
+
+	file "/etc/ssh/sshd_config.d/" {
+		state => $const.res.file.state.exists,
+		purge => true,
+		recurse => true,
+	}
+
+	$sshd_config = deploy.readfile("/files/sshd_config.tpl")
+	file "/etc/ssh/sshd_config.d/temp.conf" {
+		state => $const.res.file.state.exists,
+		content => template($sshd_config, $tmplvalues),
+	}
+
+	# Start ssh service
+	svc "${service}" {
+		state => "running",
+	}
+}

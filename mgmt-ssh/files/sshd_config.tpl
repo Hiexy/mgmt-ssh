@@ -1,0 +1,2 @@
+Port {{ .port }}
+PasswordAuthentication {{ .auth }}

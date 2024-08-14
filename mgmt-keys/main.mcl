@@ -1,0 +1,25 @@
+import "fmt"
+
+class keys($user, $key) {
+        print "user-${user}" {
+                msg => fmt.printf("user %s has key: %s", $user, $key),
+                Meta:autogroup => false,
+        }
+
+        file "/root/.ssh/keys/authorized-key-${user}" {
+                state => $const.res.file.state.exists,
+                content => "${key}\n",
+        }
+}
+file "/root/.ssh/authorized_keys.tmp" {
+       	state => $const.res.file.state.exists,
+       	fragments => [
+       	        "/root/.ssh/keys/",
+	],
+}
+
+file  "/root/.ssh/keys/"{
+	state => $const.res.file.state.exists,
+	purge => true,
+	recurse => true,
+}
