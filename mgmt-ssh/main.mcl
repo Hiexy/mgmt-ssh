@@ -3,27 +3,31 @@ import "os"
 
 $family = os.family()
 
-$package = if $family == "debian" {
-	"openssh-server"
-#} else if $family == "redhat" {
-#	"openssh-server"
-#} else if $family == "archlinux" {
-#	"openssh"
-} else {
-	""	
+$names = {
+	"debian" => {
+		"pkg" => "openssh-server",
+		"svc" => "sshd",
+	},
+	"archlinux" => {
+		"pkg" => "openssh-server",
+		"svc" => "sshd",
+	},
+	"redhat" => {
+		"pkg" => "openssh-server",
+		"svc" => "sshd",
+	},
+	"" => {
+		"pkg" => "",
+		"svc" => "",
+	},
 }
 
-$service = if $family == "debian" {
-	"ssh"
-#} else if $family == "redhat" {
-# 	"sshd"
-#} else if $family == "archlinux" {
-# 	"sshd"
-} else {
-	""
-}
+$ssh_name map{str: str} = $names[$family]
 
-class ssh($port, $auth) {
+$package str = $ssh_name["pkg"]
+$service str = $ssh_name["svc"]
+
+class ssh($config_values) {
 	# Install openssh package
 	pkg "${package}" {
 		state => "installed",

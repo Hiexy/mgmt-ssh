@@ -1,7 +1,21 @@
 import "mgmt-ssh/"
 import "mgmt-keys/"
 
-include ssh.ssh(22, "yes")
+$acceptedEnv = "LANG LC_* GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL"
+$agentForwarding = "yes"
+$passAuth = "no"
+$permitRoot = "prohibit-password"
+$port = 22
+
+$ssh_config_values = {
+	acceptedEnv => $acceptedEnv,
+	agentForwarding => $agentForwarding,
+	passAuth => $passAuth,
+	permitRoot => $permitRoot,
+	port => $port,
+}
+
+include ssh.ssh($ssh_config_values)
 include keys.keys("oalshuha", "ssh-ed25519 XXX oalshuha@Loki")
 include keys.keys("pgl", "ssh-ed25519 XXX pgl@lpc23")
 include keys.keys("james", "ssh-rsa XXX james@miaplaza")
