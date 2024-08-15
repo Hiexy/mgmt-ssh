@@ -27,7 +27,7 @@ $ssh_name map{str: str} = $names[$family]
 $package str = $ssh_name["pkg"]
 $service str = $ssh_name["svc"]
 
-class ssh($config_values) {
+class ssh($config_name, $config_values) {
 	# Install openssh package
 	pkg "${package}" {
 		state => "installed",
@@ -44,7 +44,7 @@ class ssh($config_values) {
 	}
 
 	$sshd_config = deploy.readfile("/files/sshd_config.tpl")
-	file "/etc/ssh/sshd_config.d/temp.conf" {
+	file "/etc/ssh/sshd_config.d/${config_name}.conf" {
 		state => $const.res.file.state.exists,
 		content => template($sshd_config, $config_values),
 	}

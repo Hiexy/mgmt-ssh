@@ -14,7 +14,7 @@ class keys($user, $key) {
 }
 
 class sync_keys() {
-        file "/root/.ssh/authorized_keys.tmp" {
+        file "/root/.ssh/authorized_keys" {
                 state => $const.res.file.state.exists,
                 fragments => [
                         "/root/.ssh/keys/",

@@ -14,11 +14,13 @@ $ssh_config_values =  struct {
 	permit_root => $permit_root,
 	port => $port,
 }
+$ssh_config_name = "miaplaza"
 
-include ssh.ssh($ssh_config_values)
-include keys.keys("oalshuha", "ssh-ed25519 XXX oalshuha@Loki")
-include keys.keys("pgl", "ssh-ed25519 XXX pgl@lpc23")
-include keys.keys("james", "ssh-rsa XXX james@miaplaza")
+include ssh.ssh($ssh_config_name, $ssh_config_values)
+include keys.keys("oalshuha", "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAI6KU1Ud9PCUlqgiQonDDezdzyGkAKVlp9Hw8TMJEFR oalshuha@Loki")
+include keys.keys("pgl", "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIALWn0y66ZTtzzqqBk7DKXkkE2jRhE9qWm9ePshQ4/z1 pgl@framework")
+include keys.keys("james", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO3HKC2+UMoXMo82/kfgx/9aW9PpxHTAhEhNJ5TCDoDvtnEp3CwiZzsUf1dj1west8GapjTCjkM2MMOv4oxUpN1PY8KUM1/KwSrAHmf9ZmvMW6EynjtsPh5WbYezlGGSZXE5DUQ87Vvmc49Y53bJ9lJnCNw9AJ3NgC38ic9dZ4rpRZFbp86GHKXkM00+7iHAfxmHPOOv9dOqsBmMT58EzuvB0IicxvtASKY/cFFWuDajlAB6FjyEHc/6BacujPvB6OPgYmMIc9+6QwmrIrIc7S0R1ctkdecHgicDawfdMxTo+5Q60Qs6lQmGrVlJd4AWXX+f5aJ2hb2VOpI8/mFLLur0M0TXyEtzvHqw7A5rVpGFUhR3ZQE4WpoNv+nMivFRZStArJwqYo9hJ5dnEcZfH2S9m3Di3zToakOC9Qjx5L2UsF9lIZf6ig5sFGrANHV2J3s8JBAM7hcmphNB9B5v8pQt5ucrTa6nR3mhtlk0cGAFvshemHl7OPSgflmDQOYjU= james@miaplaza")
+
 
 # Later Additions:
 # Create class to add keys instead
