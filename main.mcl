@@ -1,17 +1,17 @@
 import "mgmt-ssh/"
 import "mgmt-keys/"
 
-$acceptedEnv = "LANG LC_* GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL"
-$agentForwarding = "yes"
-$passAuth = "no"
-$permitRoot = "prohibit-password"
+$accepted_env = "LANG LC_* GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL"
+$agent_forwarding = "yes"
+$pass_auth = "no"
+$permit_root = "prohibit-password"
 $port = 22
 
-$ssh_config_values = {
-	acceptedEnv => $acceptedEnv,
-	agentForwarding => $agentForwarding,
-	passAuth => $passAuth,
-	permitRoot => $permitRoot,
+$ssh_config_values =  struct {
+	accepted_env => $accepted_env,
+	agent_forwarding => $agent_forwarding,
+	pass_auth => $pass_auth,
+	permit_root => $permit_root,
 	port => $port,
 }
 

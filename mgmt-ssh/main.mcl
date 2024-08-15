@@ -33,12 +33,6 @@ class ssh($config_values) {
 		state => "installed",
 	}
 
-	# Update configuration of ssh
-	$tmplvalues = struct{
-		port => $port,
-		auth => $auth,
-	}
-
 	file "/etc/ssh/" {
 		state => $const.res.file.state.exists,
 	}
@@ -52,7 +46,7 @@ class ssh($config_values) {
 	$sshd_config = deploy.readfile("/files/sshd_config.tpl")
 	file "/etc/ssh/sshd_config.d/temp.conf" {
 		state => $const.res.file.state.exists,
-		content => template($sshd_config, $tmplvalues),
+		content => template($sshd_config, $config_values),
 	}
 
 	# Start ssh service
