@@ -1,10 +1,10 @@
 import "mgmt-ssh/"
 import "mgmt-keys/"
 
-# include ssh(22, "yes")
-include Keys("oalshuha", "ssh-ed25519 XXX oalshuha@Loki")
-include Keys("pgl", "ssh-ed25519 XXX pgl@lpc23")
-include Keys("james", "ssh-rsa XXX james@miaplaza")
+include ssh.ssh(22, "yes")
+include keys.keys("oalshuha", "ssh-ed25519 XXX oalshuha@Loki")
+include keys.keys("pgl", "ssh-ed25519 XXX pgl@lpc23")
+include keys.keys("james", "ssh-rsa XXX james@miaplaza")
 
 # Later Additions:
 # Create class to add keys instead

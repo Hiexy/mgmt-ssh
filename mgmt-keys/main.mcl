@@ -10,16 +10,20 @@ class keys($user, $key) {
                 state => $const.res.file.state.exists,
                 content => "${key}\n",
         }
-}
-file "/root/.ssh/authorized_keys.tmp" {
-       	state => $const.res.file.state.exists,
-       	fragments => [
-       	        "/root/.ssh/keys/",
-	],
+	include sync_keys()
 }
 
-file  "/root/.ssh/keys/"{
-	state => $const.res.file.state.exists,
-	purge => true,
-	recurse => true,
+class sync_keys() {
+        file "/root/.ssh/authorized_keys.tmp" {
+                state => $const.res.file.state.exists,
+                fragments => [
+                        "/root/.ssh/keys/",
+                ],
+        }
+
+        file  "/root/.ssh/keys/"{
+                state => $const.res.file.state.exists,
+                purge => true,
+                recurse => true,
+	}
 }
